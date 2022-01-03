@@ -1,4 +1,16 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import './BackgroundCollectedPage.dart';
+import './BackgroundCollectingTask.dart';
+import './ChatPage.dart';
+import './DiscoveryPage.dart';
+import './SelectBondedDevicePage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -105,11 +117,44 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+
+        floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                child: Icon(
+                    Icons.bluetooth
+                ),
+                onPressed: () async {
+                  final BluetoothDevice? selectedDevice =
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return DiscoveryPage();
+                      },
+                    ),
+                  );
+
+                  if (selectedDevice != null) {
+                    print('Discovery -> selected ' + selectedDevice.address);
+                  } else {
+                    print('Discovery -> no device selected');
+                  }
+                },
+                heroTag: null,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FloatingActionButton(
+                child: Icon(
+                    Icons.add
+                ),
+                onPressed: () => _incrementCounter(),
+                heroTag: null,
+              )
+            ]
+        )
     );
   }
 }
