@@ -123,6 +123,31 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               FloatingActionButton(
                 child: Icon(
+                    Icons.upload
+                ),
+                onPressed: () async {
+
+                  // C8:C9:A3:CA:99:86 ESP address
+                  String text = "ESP test message";
+                  BluetoothConnection? connection;
+
+                  BluetoothConnection.toAddress("C8:C9:A3:CA:99:86").then((_connection) { //use address from discovery page
+                    print('Connected to the device');
+                    connection = _connection;
+                    setState(() {
+                      //isConnecting = false;
+                      //isDisconnecting = false;
+                      connection!.output.add(Uint8List.fromList(utf8.encode(text + "\r\n")));
+                    });
+                  });
+                },
+                heroTag: null,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FloatingActionButton(
+                child: Icon(
                     Icons.bluetooth
                 ),
                 onPressed: () async {
