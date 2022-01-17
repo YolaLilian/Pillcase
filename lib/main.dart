@@ -126,7 +126,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     Icons.upload
                 ),
                 onPressed: () async {
+                  try {
+                    String data = "Dit is een ESP test";
+                    String pillcaseAddress = "C8:C9:A3:CA:99:86"; //We should get this address from app settings
 
+                    BluetoothConnection connection = await BluetoothConnection.toAddress(pillcaseAddress);
+                    print('Connected to the pillcase');
+
+                    connection.output.add(Uint8List.fromList(utf8.encode(data + "\r\n"))); // Sending data
+                    //connection.output.add(Uint8List.fromList(utf8.encode(data2 + "\r\n"))); // Sending more data
+
+                    connection.finish();
+                    print('Connection stopped.');
+
+                  }
+                  catch (exception) {
+                    //do something?
+                    print('Cannot connect, exception occured');
+                  }
+                /*
                   // C8:C9:A3:CA:99:86 ESP address
                   String text = "ESP test message";
                   BluetoothConnection? connection;
@@ -139,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       //isDisconnecting = false;
                       connection!.output.add(Uint8List.fromList(utf8.encode(text + "\r\n")));
                     });
-                  });
+                  });*/
                 },
                 heroTag: null,
               ),
